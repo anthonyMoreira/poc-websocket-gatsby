@@ -11,7 +11,7 @@ const pageStyles = {
     fontFamily: "-apple-system, Roboto, sans-serif, serif",
 }
 
-const APIPort = "https://poc-websocket-user-producer.ew.r.appspot.com"
+const APIPort = "http://poc-websocket-api.moreira.tech"
 
 // markup
 const IndexPage = () => {
