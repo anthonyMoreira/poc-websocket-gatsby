@@ -1,30 +1,6 @@
 import * as React from "react";
 import {useTable} from "react-table";
-import styled from 'styled-components'
 
-const Styles = styled.div`
-  padding: 1rem;
-  table {
-    border-spacing: 0;
-    border: 1px solid black;
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-    th,td {
-      margin:0;
-      padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-`
 const UserTable = ({data}) => {
     const columns = React.useMemo(() => [
         {
@@ -43,13 +19,12 @@ const UserTable = ({data}) => {
 
 
     return (
-        <Styles>
-            <table {...getTableProps()}>
+            <table {...getTableProps()} class="border-2 border-black-400 my-5">
                 <thead>
                 {headerGroups.map(h => (
                     <tr {...h.getHeaderGroupProps()}>
                         {h.headers.map(column => (
-                            <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                            <th {...column.getHeaderProps()}  class="px-4">{column.render('Header')}</th>
                         ))}
                     </tr>
                 ))}
@@ -58,16 +33,15 @@ const UserTable = ({data}) => {
                     {rows.map((row, i) => {
                        prepareRow(row)
                        return (
-                           <tr {...row.getRowProps()}>
+                           <tr {...row.getRowProps()} class="border px-4">
                                {row.cells.map(cell => {
-                                   return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                   return <td {...cell.getCellProps()} class="text-center">{cell.render('Cell')}</td>
                                })}
                            </tr>
                        )
                     })}
                 </tbody>
             </table>
-        </Styles>
     );
 }
 
