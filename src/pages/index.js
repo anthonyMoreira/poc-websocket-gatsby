@@ -42,14 +42,11 @@ const IndexPage = () => {
                 let user = JSON.parse(ok.body);
                 if (user.status === "INVALID") {
                     setErrorMessage(user.processingMessage);
-                } else {
-                    setErrorMessage(null);
                 }
             });
             stompClient.subscribe('/user/queue/delete-user', function (ok) {
                 console.log("User deleted:" + ok.body)
                 setLoading(false);
-                setErrorMessage(null);
             });
             stompClient.subscribe('/topic/user-event', consumeUserEvent);
             setConnectionStatus({connected: true});
@@ -69,12 +66,14 @@ const IndexPage = () => {
         setRegisterFunction(() => x => {
             if (connectionStatus.connected) {
                 setLoading(true);
+                setErrorMessage(null);
                 stompClient.send("/app/register-user", {}, JSON.stringify({username: userName}));
             }
         });
         setDeleteFunction(() => x => {
             if (connectionStatus.connected) {
                 setLoading(true);
+                setErrorMessage(null);
                 stompClient.send("/app/delete-user", {}, JSON.stringify({username: userName}));
             }
         })
