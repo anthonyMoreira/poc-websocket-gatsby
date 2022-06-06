@@ -19,12 +19,12 @@ const UserTable = ({data}) => {
 
 
     return (
-            <table {...getTableProps()} class="border-2 border-black-400 my-5">
+            <table {...getTableProps()} className="py-5">
                 <thead>
                 {headerGroups.map(h => (
                     <tr {...h.getHeaderGroupProps()}>
                         {h.headers.map(column => (
-                            <th {...column.getHeaderProps()}  class="px-4">{column.render('Header')}</th>
+                            <th {...column.getHeaderProps()}  className="px-4 border-b-2 border-black">{column.render('Header')}</th>
                         ))}
                     </tr>
                 ))}
@@ -33,9 +33,9 @@ const UserTable = ({data}) => {
                     {rows.map((row, i) => {
                        prepareRow(row)
                        return (
-                           <tr {...row.getRowProps()} class="border px-4">
+                           <tr {...row.getRowProps()} className="px-4">
                                {row.cells.map(cell => {
-                                   return <td {...cell.getCellProps()} class="text-center">{cell.render('Cell')}</td>
+                                   return <td {...cell.getCellProps()} className="text-center">{cell.render('Cell')}</td>
                                })}
                            </tr>
                        )
