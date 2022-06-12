@@ -1,14 +1,28 @@
 import * as React from "react";
 import {useTable} from "react-table";
 
-const UserTable = ({data}) => {
+const UserTable = ({data, updateCallback}) => {
     const columns = React.useMemo(() => [
         {
                     Header: "Username",
                     id: "username",
                     accessor: "username"
+        },
+        {
+            Header: "Email",
+            id: "email",
+            accessor: "email"
+        },
+        {
+            Header: "Actions",
+            id: "actions",
+            Cell: ({row}) => (
+                <button onClick={() => updateCallback(row.values)}>
+                    Update
+                </button>
+            )
         }
-    ], []);
+    ], [updateCallback]);
     const {
         getTableProps,
         getTableBodyProps,
