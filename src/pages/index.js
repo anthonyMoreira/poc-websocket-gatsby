@@ -10,7 +10,6 @@ const APIPort = "http://localhost:8080"
 // markup
 const IndexPage = () => {
     const [registerFunction, setRegisterFunction] = useState(() => () => "");
-    const [deleteFunction, setDeleteFunction] = useState(() => () => "");
     const [updateFunction, setUpdateFunction] = useState(() => () => "");
     const [userName, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -22,13 +21,19 @@ const IndexPage = () => {
 
     const initialUserStateUpdate = {type: "REGISTER", email: "", username: ""};
     const stateReducer = function (userStateUpdate, action) {
-        console.log("Reducing state...");
         setUsername(action.username);
         setEmail(action.email);
         return action;
     }
     const [userStateUpdate, dispatchUserState] = useReducer(stateReducer, initialUserStateUpdate);
 
+    const deleteCall = function (username) {
+        if (connectionStatus.connected) {
+            setLoading(true);
+            setErrorMessage(null);
+            stompClient.send("/app/delete-user", {}, JSON.stringify({"username": username}));
+        }
+    }
 
     const consumeUserEvent = function (data) {
         console.log("Consumed user event", data);
@@ -99,13 +104,6 @@ const IndexPage = () => {
                 stompClient.send("/app/register-user", {}, JSON.stringify({username: userName, "email": email}));
             }
         });
-        setDeleteFunction(() => x => {
-            if (connectionStatus.connected) {
-                setLoading(true);
-                setErrorMessage(null);
-                stompClient.send("/app/delete-user", {}, JSON.stringify({username: userName}));
-            }
-        });
         setUpdateFunction(() => x => {
             if (connectionStatus.connected) {
                 setLoading(true);
@@ -139,11 +137,9 @@ const IndexPage = () => {
                                email: row.email,
                                username: row.username
                            })}
-                           deleteCallback={(row) => dispatchUserState({
-                               type: "DELETE",
-                               email: row.email,
-                               username: row.username
-                           })}
+                           deleteCallback={(row) => {
+                               deleteCall(row.username);
+                           }}
                 />
                 <div className="flex flex-col md:mr-16 mt-10 mb-5">
                     <div
@@ -195,14 +191,6 @@ const IndexPage = () => {
                             </div>
                         </Fragment>
                     }
-                    <div className="flex-initial mx-8">
-                        <button
-                            className={(loading ? "cursor-wait disabled" : "cursor-hover") + " bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"}
-                            onClick={deleteFunction}>
-                            Delete
-                        </button>
-                    </div>
-
                 </div>
             </div>
         </main>
