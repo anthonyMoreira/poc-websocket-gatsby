@@ -6,7 +6,7 @@ import UserTable from "../components/UserTable";
 import NavBar from "../components/NavBar";
 import UserLog from "../components/UserLog";
 
-const APIPort = "http://localhost:8080"
+const APIPort = "https://poc-websocket-api.moreira.tech"
 
 // markup
 const IndexPage = () => {
