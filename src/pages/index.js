@@ -20,6 +20,8 @@ const IndexPage = () => {
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
     const [messages, setMessages] = useState([]);
+    const [requestCount, setRequestCount] = useState(0);
+    const [totalConnectedUsers, setTotalConnectedUsers] = useState(0);
 
     const initialUserStateUpdate = {type: "REGISTER", email: "", username: ""};
     const stateReducer = function (userStateUpdate, action) {
@@ -86,6 +88,16 @@ const IndexPage = () => {
                 }
             });
             stompClient.subscribe('/topic/user-event', consumeUserEvent);
+            stompClient.subscribe("/topic/analytics-event", function (msg) {
+                console.log("Analytics update :"+msg.body);
+                const analytics = JSON.parse(msg.body);
+                if (analytics.count30Sec) {
+                    setRequestCount(analytics.count30Sec);
+                }
+                if (analytics.totalConnectedUsers) {
+                    setTotalConnectedUsers(analytics.totalConnectedUsers);
+                }
+            });
             setConnectionStatus({connected: true});
         }, function (err) {
             console.error("Stomp error", err);
@@ -199,8 +211,17 @@ const IndexPage = () => {
                     </div>
                 </div>
                 <div className="flex-initial w-64">
+                    <div>
+                        Last 30 seconds request count : {requestCount}
+                    </div>
+                    <div>
+                        Total connected users : {totalConnectedUsers}
+                    </div>
+                </div>
+                <div className="flex-initial w-64">
                     <UserLog messages={messages}/>
                 </div>
+
             </div>
         </main>
     )
