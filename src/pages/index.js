@@ -117,6 +117,7 @@ const IndexPage = () => {
                 setLoading(true);
                 setErrorMessage(null);
                 stompClient.send("/app/register-user", {}, JSON.stringify({username: userName, "email": email}));
+                dispatchUserState({type: "REGISTER", email: "", username: ""});
             }
         });
         setUpdateFunction(() => x => {
@@ -124,6 +125,7 @@ const IndexPage = () => {
                 setLoading(true);
                 setErrorMessage(null);
                 stompClient.send("/app/update-user", {}, JSON.stringify({username: userName, "email": email}));
+                dispatchUserState({type: "REGISTER", email: "", username: ""});
             }
         })
     }, [userName, stompClient, connectionStatus, email]);
